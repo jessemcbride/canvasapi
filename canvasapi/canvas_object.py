@@ -66,7 +66,12 @@ class CanvasObject(object):
         self.attributes = attributes
 
         for attribute, value in attributes.items():
-            self.__setattr__(attribute, value)
+            if attribute == 'endpoint':
+                value = value.rstrip('/')
+                value = value[value.find('/') + 1:]
+                self.__setattr__('id', value)
+            else:
+                self.__setattr__(attribute, value)
 
             # datetime field
             if DATE_PATTERN.match(text_type(value)):

@@ -4,6 +4,15 @@ from collections import Iterable
 from six import binary_type, string_types, text_type
 
 
+class LazyResponse(object):
+
+    def __init__(self, kwargs):
+        self._kwargs = kwargs
+
+    def json(self):
+        return self._kwargs
+
+
 def is_multivalued(value):
     """
     Determine whether the given value should be treated as a sequence

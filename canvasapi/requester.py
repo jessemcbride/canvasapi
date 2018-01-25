@@ -7,6 +7,7 @@ from canvasapi.exceptions import (
     BadRequest, CanvasException, Forbidden, InvalidAccessToken,
     ResourceDoesNotExist, Unauthorized
 )
+from canvasapi.util import LazyResponse
 
 
 class Requester(object):
@@ -64,9 +65,14 @@ class Requester(object):
         _kwargs = _kwargs or []
         _kwargs.extend(kwargs.items())
 
-        # Do any final argument processing before sending to request method.
+        # Request preflight
         for i, kwarg in enumerate(_kwargs):
             kw, arg = kwarg
+
+            # Check if object is to be lazy loaded
+            if kw == 'lazy':
+                if arg:
+                    return LazyResponse({'endpoint': endpoint})
 
             # Convert any datetime objects into ISO 8601 formatted strings.
             if isinstance(arg, datetime):

@@ -648,7 +648,7 @@ class Course(CanvasObject):
 
         return Page(self._requester, page_json)
 
-    def get_page(self, url):
+    def get_page(self, url, **kwargs):
         """
         Retrieve the contents of a wiki page.
 
@@ -663,7 +663,8 @@ class Course(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'courses/{}/pages/{}'.format(self.id, url)
+            'courses/{}/pages/{}'.format(self.id, url),
+            _kwargs=combine_kwargs(**kwargs)
         )
         page_json = response.json()
         page_json.update({'course_id': self.id})
